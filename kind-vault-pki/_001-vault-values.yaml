@@ -1,0 +1,13 @@
+server:
+  ha:
+    enabled: false
+    replicas: 1
+  dev:
+    enabled: true
+  dataStorage:
+    enabled: true
+injector:
+  enabled: false
+# ui:
+#   enabled: true
+#   serviceType: "LoadBalancer"
