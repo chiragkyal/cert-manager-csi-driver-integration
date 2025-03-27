@@ -6,7 +6,8 @@ metadata:
 spec:
   containers:
     - name: client-workload
-      image: alpine/openssl
+      # image: alpine/openssl
+      image: quay.io/ckyal/aws-rolesanywhere:latest
       command: ["sh", "-c", "sleep 3600"]
       resources:
         limits: { memory: "128Mi", cpu: "500m" }
@@ -27,3 +28,4 @@ spec:
           csi.cert-manager.io/issuer-group: cert-manager.io
 
           csi.cert-manager.io/dns-names: test.example.com
+          csi.cert-manager.io/uri-sans: "spiffe://example.com/ns/${POD_NAMESPACE}/pod/${POD_NAME}"

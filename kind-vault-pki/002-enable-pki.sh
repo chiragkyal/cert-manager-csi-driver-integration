@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # xRef: https://developer.hashicorp.com/vault/docs/secrets/pki/setup
+# https://developer.hashicorp.com/vault/api-docs/secret/pki
 
 # Enable the PKI secrets engine
 kubectl -n vault exec pods/vault-0 -- \
@@ -18,10 +19,12 @@ kubectl -n vault exec pods/vault-0 -- \
 # Configure a role that maps a name in Vault to a procedure for generating a certificate.
 # When users or machines generate credentials, they are generated against this role:
 # This creates a role named example-dot-com that allows issuing certificates
-# for the example.com domain and its subdomains, with a maximum TTL of 72h.
+# for the example.com domain, its subdomains, and SPIFFE URI SAN with a maximum TTL of 72h.
+# See https://developer.hashicorp.com/vault/api-docs/secret/pki for different config options
 kubectl -n vault exec pods/vault-0 -- \
     vault write pki/roles/example-dot-com \
     allowed_domains=example.com \
+    allowed_uri_sans="spiffe://example.com/*" \
     allow_subdomains=true \
     require_cn=false \
     max_ttl=72h
@@ -35,3 +38,8 @@ path "pki/sign/example-dot-com" {
   capabilities = ["read", "list", "create", "update"]
 }
 EOF
+
+# Extract Root CA from vault
+# We will use it to build trust
+kubectl -n vault exec pods/vault-0 -- \
+    vault read -field=certificate pki/cert/ca >ca.crt

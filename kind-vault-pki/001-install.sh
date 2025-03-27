@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Create a kind cluster
+kind create cluster --name cm-csi-driver
+
 # Install cert-manager
 kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.17.0/cert-manager.yaml
 
