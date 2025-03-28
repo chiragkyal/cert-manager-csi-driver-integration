@@ -1,3 +1,4 @@
 **/*.terraform*
+**/terraform.tfstate
 bin/
 ca.crt
