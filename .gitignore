@@ -2,3 +2,5 @@
 **/terraform.tfstate
 bin/
 ca.crt
+env.sh
+aws.config
